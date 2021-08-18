@@ -1,0 +1,39 @@
+<?php
+require('Views/header.phtml');
+require_once('Models/Users.php');
+
+if (isset($_POST['login']))
+
+{
+    $name = $_POST['uname'];
+    $pass = $_POST['password'];
+    $email = $_POST['uname'];
+    $user = new Users();
+    $user->login($name, $pass, $email);
+}
+?>
+
+<div class="card mx-auto" style="width: 21.5em;margin:0 auto;">
+    <div class="card-body">
+        <form method="post">
+            <h1 class="h3 mb-3 font-weight-normal">Login</h1>
+            <input type="text" name="uname" class="form-control" placeholder="Username" required autofocus>
+            <br>
+            <input type="password" name="password" class="form-control" placeholder="Password" required>
+            <br>
+            <div class="checkbox mb-3">
+                <label>
+                    <input type="checkbox" value="remember-me"> Remember me
+                </label>
+            </div>
+            <button class="btn btn-outline-info btn-block" type="submit" name="login">Log In</button>
+            <br>
+            <p>Not a member yet? <a href="/register.php">Register here</a></p>
+        </form>
+    </div>
+</div>
+
+
+<?php
+require ('Views/footer.phtml');
+?>

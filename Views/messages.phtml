@@ -1,0 +1,104 @@
+<?php
+require('Views/header.phtml');
+?>
+
+<!-- Creates a list of contacts-->
+<?php if (empty($_SESSION['login'])){echo '<div class = alert-danger><h3 align="center">Please login first!</h3></div><br>';}?>
+    <div class="card text-dark bg-warning w-25 mx-auto" style="border-radius: 15px">
+        <div class="card-header">
+            <?php if (!empty($_SESSION['login'])){echo '<h1 class="h4 mb-3 font-weight-normal"> Welcome, '.$_SESSION['login'].'</h1>';} ?>
+            Select contact to start conversation
+        </div>
+        <div class="card-body text-white bg-dark" style="border-bottom-left-radius: 15px;border-bottom-right-radius: 15px">
+            <input class="form-control" type="text" id="search" placeholder="Search contacts" aria-label="Search" style="border-radius: 15px"><hr color="white">
+            <h5 class="card-title">Contacts</h5>
+            <ul class="list-group list-group-flush" id="contactList" style="overflow-y: scroll; height: 400px">
+            </ul>
+        </div>
+    </div>
+
+
+<script>
+    getusers();
+    search();
+
+    //This function fetches users stored from the database using fetchUsers.php file
+    function getusers()
+    {
+        fetch('fetchUsers.php').then(function(response)
+        {
+            return response.json();
+        })
+
+        .then(function (data)
+        {
+
+            for(let i = 0; i < data.length; i++){
+                let element = "";
+
+                element = '<div class=list-group><a href="chat.php?username='+data[i].username+'&userid='+data[i].user_id+'" class="list-group-item list-group-item-action text-white bg-dark">'+data[i].fullname+'</a></div>'
+
+                // console.log(data[i].username)
+                document.getElementById('contactList').innerHTML += element ;
+            }
+
+
+
+        })
+
+        .catch(function (error)
+        {
+
+                document.getElementById('contacts').innerText = 'Error: '+ error;
+
+        })
+    }
+
+    function search()
+    {
+        fetch('search.php').then(function(response)
+        {
+            return response.json();
+        })
+
+            .then(function (data)
+            {
+                console.log(data)
+
+                // for(let i = 0; i < data.length; i++){
+                //     console.log(data[i].fullname)
+                document.getElementById('search').innerText = data;
+                // }
+
+
+
+            })
+
+            .catch(function (error)
+            {
+
+                document.getElementById('search').innerText = 'Error: '+ error;
+
+            })
+
+    }
+
+    // function getusers() {
+    //     //Send an XMLHttpRequest to the 'fetchUsers.php' file
+    //     if (window.XMLHttpRequest) {
+    //         xmlhttp = new XMLHttpRequest();
+    //         xmlhttp.open("GET", "fetchUsers.php", false);
+    //         xmlhttp.send(null);
+    //     } else {
+    //         xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    //         xmlhttp.open("GET", "fetchUsers.php", false);
+    //         xmlhttp.send();
+    //     }
+    //     //Replace the content of the messages with the response from the 'fetchUsers.php' file
+    //     document.getElementById('contacts').innerHTML = xmlhttp.responseText;
+    // }
+</script>
+
+<?php
+require ('Views/footer.phtml');
+?>

@@ -1,0 +1,61 @@
+<?php
+require('Views/header.phtml');
+require_once('Models/Users.php');
+
+if (isset($_POST['register'])) {
+    $name = $_POST['name'];
+    $username = $_POST['uname'];
+    $pass = $_POST['pass'];
+    $pass2 = $_POST['pass2'];
+    $email = $_POST['email'];
+
+    $file_name = $_FILES['picture']['name'];
+    $file_tmp_name = $_FILES['picture']['tmp_name'];
+    $target_dir = "images/";
+    $image_path = $target_dir.$file_name;
+
+    if((move_uploaded_file($file_tmp_name,$target_dir.$file_name)))
+    {
+        $_SESSION['profile'] = $image_path;
+    }
+
+    if ($pass != $pass2) {
+        echo "Password doesn't match";
+    } else {
+        $user = new Users();
+        $user->register($username, $pass, $email, $name, $image_path);
+    }
+}
+?>
+
+    <div class="card mx-auto" style="width: 21.5em;margin:0 auto;">
+        <div class="card-body">
+            <form method="post">
+                <h1 class="h3 mb-3 font-weight-normal">Register</h1>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="name" placeholder="Full Name" required>
+                    <span class="input-group-addon">&nbsp</span>
+                </div>
+                <br>
+                <input type="text" class="form-control" name="uname" placeholder="Username" required>
+                <br>
+                <input type="email" class="form-control" name="email" placeholder="Email address" required autofocus>
+                <br>
+                <input type="password" class="form-control" name="pass" placeholder="Password" required>
+                <br>
+                <input type="password" class="form-control" name="pass2" placeholder="Confirm Password" required>
+                <br>
+                <label>Choose a Profile Picture</label>
+                <input type="file" name="picture" class="form-control-file" style="width: 450px"/>
+                <br>
+                <button class="btn btn-outline-info btn-block" type="submit" name="register">Register</button>
+                <br>
+                <p>Already have an account? <a href="/login.php">Login here</a></p>
+            </form>
+        </div>
+    </div>
+<br>
+
+<?php
+require ('Views/footer.phtml');
+?>

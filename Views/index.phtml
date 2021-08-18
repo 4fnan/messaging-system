@@ -1,0 +1,12 @@
+<?php require('Views/header.phtml'); ?>
+
+    <div class="container">
+        <?php if (isset($_SESSION['login']))
+        {
+            echo '<h3>Welcome, '.$_SESSION['login'].'</h3>';
+        }?>
+
+
+    </div>
+
+<?php require('Views/footer.phtml');?>
